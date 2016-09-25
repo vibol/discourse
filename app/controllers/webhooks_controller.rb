@@ -1,5 +1,11 @@
 require "openssl"
 
+class Object
+  def in? container
+    container.include? self
+  end
+end
+
 class WebhooksController < ActionController::Base
 
   def mailgun
@@ -82,6 +88,26 @@ class WebhooksController < ActionController::Base
         process_bounce(message_id, SiteSetting.hard_bounce_score)
       when "soft_bounce"
         process_bounce(message_id, SiteSetting.soft_bounce_score)
+      end
+    end
+
+    render nothing: true, status: 200
+  end
+
+  def sparkpost
+    events = params["_json"] || [params]
+    events.each do |event|
+      event = event["msys"]
+      message_id = event["campaign_id"]
+      bounce_class = event["bounce_class"] ? event["bounce_class"].to_i : nil
+
+      # bounce class definitions: https://support.sparkpost.com/customer/portal/articles/1929896
+      if bounce_class < 80
+        if bounce_class.in? [10, 25, 30]
+          process_bounce(message_id, SiteSetting.hard_bounce_score)
+        else
+          process_bounce(message_id, SiteSetting.soft_bounce_score)
+        end
       end
     end
 
