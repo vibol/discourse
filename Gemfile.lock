@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/vibol/onebox.git
-  revision: 8354bd4304801afe3882c4e701b04e8ee1c416c3
-  branch: feature/amazon-instant-video
+  revision: ea5841c25f2ef22e6163d04fb8cc1be72ab30540
+  branch: feature/aiv2
   specs:
-    onebox (1.5.50)
+    onebox (1.5.60)
       htmlentities (~> 4.3.4)
       moneta (~> 0.8)
       multi_json (~> 1.11)
